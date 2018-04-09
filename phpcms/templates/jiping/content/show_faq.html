@@ -1,0 +1,78 @@
+{template 'content','header'}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="service_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+     <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{$CATEGORYS[27][catname]}</span><span class="english">{$CATEGORYS[27]['description']}</span></h2>
+            <ul class="list">
+            {pc:get sql="SELECT arrchildid FROM ji_category WHERE catid=27" cache='3600" return="catarr"}
+            {php $catarr=$catarr[0]['arrchildid']}
+            {php $catarr=explode(',',$catarr)}
+            {php array_shift($catarr)}
+                {loop $catarr $cid}
+                <li{if $catid==$cid} class="cur"{/if}><a href="{$CATEGORYS[$cid][url]}" title="{$CATEGORYS[$cid][catname]}">{$CATEGORYS[$cid][catname]}</a></li>
+                {/loop}  
+             {/pc}
+            </ul>
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">{$parentid}
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="/" title="">首页</a> &gt;<span class="link"><a href="{$CATEGORYS[28]['url']}" title="{$CATEGORYS[27]['catname']}">{$CATEGORYS[27]['catname']}</a>&nbsp;&gt;&nbsp;<a href="{$CATEGORYS[$catid]['url']}" title="{$CATEGORYS[$catid]['catname']}">{$CATEGORYS[$catid]['catname']}</a></span>&nbsp;&gt;</span>&nbsp; <span class="now">{$title}</span></span></div>
+        <div class="main_content">
+        	<div class="news_info faq_info">
+            	  
+                <div class="faq">
+                 <div class="hd"><span class="ico ico_q"></span><span class="ques">{$title}</span></div>
+                   <div class="bd"><span class="ico ico_a"></span><span class="answer">{$content}</span></div>
+   
+                  </div>
+                
+                <div class="fanye fs_14">
+                    <span>上一篇：<a href="{$previous_page[url]}">{$previous_page[title]}</a></span><span>下一篇：<a href="{$next_page[url]}">{$next_page[title]}</a></span>
+                </div>
+            </div>
+            <div class="related_news">
+                <h3 class="fs_14">常见问题</h3>
+                <ul class="c_f">
+                   
+      
+                    
+                    {pc:content  action="position" posid="19" order="listorder DESC" num="6"}
+
+                    {loop $data $key $val}
+                    
+                    <li> <a href="{$val['url']}">{$val['title']}</a></li>
+                    
+                    {/loop}
+                    
+                    
+                </ul>
+            </div> 
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template "content","footer"}

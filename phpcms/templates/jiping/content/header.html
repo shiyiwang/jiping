@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{if isset($SEO['title']) && !empty($SEO['title'])}{$SEO['title']}{/if}{$SEO['site_title']}</title>
+<meta name="keywords" content="{$SEO['keyword']}" />
+<meta name="description" content="　{$SEO['description']}">
+<link href="{CSS_PATH}style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{JS_PATH}jiping/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="{JS_PATH}jiping/MSClass.js"></script>
+<script type="text/javascript" src="{JS_PATH}jiping/sl.js"></script>
+<link rel="stylesheet" type="text/css" href="{CSS_PATH}style/jquery.fancybox.css" media="screen" />
+<script type="text/javascript" src="{JS_PATH}jiping/jquery.mousewheel-3.0.6.pack.js"></script>
+<script type="text/javascript" src="{JS_PATH}jiping/jquery.fancybox.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+	  	$.focus("#focus001");
+	});
+</script>
+</head>
+
+<body>
+{php $now_url="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']}
+{if $catid==27}
+	{php $new_url=preg_replace("/catid\=27/","catid=28",$now_url)}
+	{header("Location:".$new_url)}
+{/if}
+{if $catid==33}
+	{php $new_url=preg_replace("/catid\=33/","catid=34",$now_url)}
+	{header("Location:".$new_url)}
+{/if}
+
+{if $catid}
+    {pc:get sql="SELECT arrparentid FROM ji_category WHERE catid=$catid" return="cat_fid"}
+    {/pc}
+    {php $cat_fid=explode(',',$cat_fid[0]['arrparentid'])}
+    {php $cur_cat=$cat_fid[1]}
+{/if}
+
+<!--头部start-->
+<div class="header bg_x">
+	<div class="w_1000 o_a">
+		<a href="/"><h1 class="header_logo f_l">吉平化工</h1></a>
+        <div class="header_r f_r">
+        	<div class="map t_r"><a href="http://{$_SERVER["HTTP_HOST"]}/index.php?m=member&c=index&a=register&siteid=1" title="会员注册">会员注册</a><a href="http://{$_SERVER["HTTP_HOST"]}/index.php?m=member&c=index&a=login" title="登录">登录</a><a href="javascript:" onclick="addFavorite()" title="网站收藏">网站收藏</a>
+            <a class="no_border" href="#" onclick="setHomepage()"; title="设为主页">设为主页</a></div>
+            <div class="contact"><span class="tel ff_yh fs_14"><b class="ico ico_tel"></b>咨询电话：<em class="fs_18">0755-8963 6850</em></span><a class="weibo" href="http://t.qq.com/szjjping" title="" rel="nofollow" target="_blank"><b class="ico ico_tx"></b>腾讯微博</a><a class="weibo" href="http://e.weibo.com/u/3238530764" title="" rel="nofollow" target="_blank"><b class="ico ico_sina"></b>新浪微博</a></div>
+        </div>
+    </div>
+</div>
+<!--头部end-->
+<!--导航start-->
+<div class="nav_bar bg_x">
+	<div class="w_1000 o_a">
+    	<ul class="main_nav" id="mainNav">
+          <?php if(!isset($CATEGORYS)) { $CATEGORYS = getcache('category_content_'.$siteid,'commons'); } ?>
+        	<li class="item index"><a class="main {if $catid==false} cur {/if}" href="http://{$_SERVER["HTTP_HOST"]}">首页</a></li>
+
+          <li class="item">
+                <a class="main {if $cur_cat==1||$catid==1}cur{/if}" href="{$CATEGORYS['2'][url]}"  target="_blank">{$CATEGORYS['1'][catname]}</a>
+                {pc:content action="category" catid="1" num="10" siteid="$siteid" order="listorder ASC" return="cat_data"}
+                <div class="sub_nav">
+                    <ul>
+                            {loop $cat_data $r}
+                                <li><a href="{$r[url]}" title="{$r[catname]}"  target="_blank">{$r[catname]}</a></li>
+                            {/loop}
+                    </ul>
+                </div>
+                {/pc}
+            </li>
+            <li class="item">
+                <a class="main {if $cur_cat==11||$catid==11}cur{/if}" href="{$CATEGORYS['11'][url]}"  target="_blank">{$CATEGORYS['11'][catname]}</a>
+                {pc:content action="category" catid="11" num="10" siteid="$siteid" order="listorder ASC"  return="cat_data"}
+                <div class="sub_nav">
+                    <ul>
+                            {loop $cat_data $r}
+                                <li><a href="{$r[url]}" title="{$r[catname]}"  target="_blank">{$r[catname]}</a></li>
+                            {/loop}
+                    </ul>
+                </div>
+                {/pc}
+            </li>
+             <li class="item">
+                <a class="main {if $cur_cat==6||$catid==6}cur{/if}" href="{$CATEGORYS['6'][url]}"  target="_blank">{$CATEGORYS['6'][catname]}</a>
+                {pc:content action="category" catid="6" num="10" siteid="$siteid" order="listorder ASC"  return="cat_data"}
+                <div class="sub_nav">
+                    <ul>
+                            {loop $cat_data $r}
+                                <li><a href="{$r[url]}" title="{$r[catname]}"  target="_blank">{$r[catname]}</a></li>
+                            {/loop}
+                    </ul>
+                </div>
+                {/pc}
+            </li>
+             <li class="item">
+                <a class="main {if $cur_cat==27||$catid==27}cur{/if}" href="{$CATEGORYS['28'][url]}"  target="_blank">{$CATEGORYS['27'][catname]}</a>
+                {pc:content action="category" catid="27" num="10" siteid="$siteid" order="listorder ASC"  return="cat_data"}
+                <div class="sub_nav">
+                    <ul>
+                            {loop $cat_data $r}
+                                <li><a href="{$r[url]}" title="{$r[catname]}"  target="_blank">{$r[catname]}</a></li>
+                            {/loop}
+                    </ul>
+                </div>
+                {/pc}
+            </li>
+            <li class="item"><a class="main {if $cur_cat==32||$catid==32}cur{/if}" href="{$CATEGORYS['32'][url]}"  target="_blank">{$CATEGORYS['32'][catname]}</a></li>
+             <li class="item">
+                <a class="main {if $cur_cat==33||$catid==33}cur{/if}" href="{$CATEGORYS['34'][url]}"  target="_blank">{$CATEGORYS['33'][catname]}</a>
+                {pc:content action="category" catid="33" num="10" siteid="$siteid" order="listorder ASC"  return="cat_data"}
+                <div class="sub_nav">
+                    <ul>
+                            {loop $cat_data $r}
+                                <li><a href="{$r[url]}" title="{$r[catname]}"  target="_blank">{$r[catname]}</a></li>
+                            {/loop}
+                    </ul>
+                </div>
+                {/pc}
+            </li>
+        </ul>
+    </div>
+</div>
+<!--导航end-->

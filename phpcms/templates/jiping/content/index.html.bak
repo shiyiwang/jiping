@@ -1,0 +1,254 @@
+{template "content","header"}
+<style type="text/css">
+          li.item.c_f{
+           		width:99.6%
+          } 
+</style>
+<!--banner start-->
+<div class="index_banner">
+	<div class="banner" id="focus001">
+    	<div class="cont">
+        
+           {pc:block pos="index_turn_banner_new"}{/pc} 
+
+        </div>
+    </div>
+</div>
+
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+        <div class="search bg f_r">
+			
+          {template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<!--热销产品 start-->
+<div class="hot_sales w_1000 o_a">
+	<div class="hot_bg"></div>
+	<div class="pub_hd01 bg_x"><a class="f_r c_999 ff_s" href="{$CATEGORYS[11][url]}" title="">更多>></a><span class="fw_b fs_14">热销产品</span></div>
+    <div class="bd">
+    	<div id="hotPre" class="bg"></div>
+    	<div class="hot_box" id="hotBox">
+        	<ul id="hotContent">
+            {pc:content  action="position" posid="1" order="listorder DESC" num="4"}
+            	{loop $data $key $val}
+             
+                {php $pro_id=$val['id']}
+                {pc:get sql="SELECT price FROM ji_product WHERE id=$pro_id" return="pro_price_arr"}
+            	{/pc}
+            	<li>
+                	<div class="c_img c_img140"><a href="{$val['url']}" title=""><img src="{$val['thumb']}" alt="" /></a></div>
+                    <p class="pro_tit01 t_c"><a href="{$val['url']}" title="">{$val['title']}</a></p>
+                    <p class="price t_c c_999">价格：<span class="fs_14 c_f60 fw_b">{$pro_price_arr[0]['price']} </span>元</p>
+                </li>
+               
+                {/loop}
+             {/pc}
+            </ul>
+        </div>
+       <div id="hotNext" class="bg"></div>
+    </div>
+    <script type="text/javascript">
+		new Marquee(
+		{
+		MSClass : ["hotBox","hotContent"],
+		PrevBtnID : "hotPre",
+		NextBtnID : "hotNext",
+		Direction : 2,
+		Step : 0.1,
+		Width : 936,
+		Height : 200,
+		Timer : 20,
+		DelayTime : 3000,
+		WaitTime : 3000,
+		ScrollStep: 0,
+		SwitchType: 0,
+		AutoStart : true
+		});
+	</script>
+</div>
+<!--热销产品 end-->
+<div class="hr_10"></div>
+<!--产品分类 start-->
+<div class="pro_sort w_1000 o_a">
+	<div class="pub_hd01 bg_x"><a class="f_r c_999 ff_s" href="{$CATEGORYS[11][url]}" title="">更多>></a><span class="fw_b fs_14">产品分类</span></div>
+    <div class="bd">
+   
+     {pc:get sql="SELECT typeid,name FROM ji_type " start="0" num="1000"  return="type"}
+     {/pc}
+     {php $typearr=array()}
+     {loop $type $type_vvv}
+     	{php $typearr[$type_vvv['typeid']]=$type_vvv['name']}
+     {/loop}
+    
+    
+     
+    	<ul class="main_sort" id="proSort">
+        {pc:get sql="SELECT catid FROM ji_category WHERE parentid=11" return="cat1_data"}	
+        {/pc}
+        {php $cat1_arr=array()}
+        {loop $cat1_data $cat1_val}
+        	{php $cat1_arr[]=$cat1_val['catid']}
+        {/loop}
+    
+          {loop $cat1_arr $cat1}
+          
+        	<li class="item c_f" >
+            	<h2 class="f_l"><a href="{$CATEGORYS[$cat1]['url']}" title="">{$CATEGORYS[$cat1]['catname']}</a></h2>
+                <ul class="sub_sort c_f f_l">
+                {php $cat2_str=$CATEGORYS[$cat1]["arrchildid"]}
+       			{php $cat2_arr=explode(',',$cat2_str)}
+        		{php array_shift($cat2_arr)}
+                	{loop $cat2_arr $cat2}
+                	<li>
+                  		<dl>
+                        	<dt><a href="{$CATEGORYS[$cat2]['url']}" title="{$CATEGORYS[$cat2]['catname']}">{$CATEGORYS[$cat2]['catname']}</a></dt>
+                            <dd>
+                            {php $type_str=$CATEGORYS[$cat2]['usable_type']}
+                            {php $type_arr=explode(",",$type_str)}
+                            {php array_shift($type_arr)}
+                            {php array_pop($type_arr)}
+                            {php $new_type_arr=array()}
+                            {loop $type_arr $val}
+                            	{if $n<7}
+                                {php $new_type_arr[]=$val}	
+                                {/if}
+                            {/loop}
+                       		{loop $new_type_arr $type_v}
+                            		<a href="{$CATEGORYS[$cat2]['url']}&typeid={$type_v}" title="">{$typearr[$type_v]}</a>
+                            {/loop}        
+                            </dd>
+                        </dl>
+                    </li>
+                   	{/loop}
+                    
+                </ul>
+                <div class="img_pro f_r">
+                	<ul class="c_f">
+                    	{pc:get sql="SELECT p.thumb,p.url,p.title FROM ji_product p LEFT JOIN ji_category c ON p.catid=c.catid WHERE c.parentid=$cat1" start="0" num=2" return="new_pro"}
+                        {/pc}
+                    	{loop $new_pro $pro_detail}
+                        <li>
+                        	{php $img_path=thumb($pro_detail['thumb'],7,0)}
+                        	<div class="c_img c_img87"><a href="{$pro_detail['url']}" title=""><img src="{$img_path}" alt="{$pro_detail['title']}" /></a></div>
+                            <p class="pro_tit01 t_c"><a class="c_blue2" href="{$pro_detail['url']}" title="">{$pro_detail['title']}</a></p>
+                        </li>
+                        {/loop}
+                    </ul>
+                </div>
+            </li>
+           
+           {/loop} 
+        </ul>
+    </div>
+</div>
+<!--产品分类 end-->
+<div class="hr_10"></div>
+<div class="w_1000 o_a">
+    <div class="index_box f_l">
+    <!--公司简介 start-->
+    	<div class="index_intro box">
+        	<div class="pub_hd02"><span class="fs_14 fw_b">公司简介</span></div>
+            <div class="bd">
+            	<ul class="intro_img c_f">
+                	<li class="mr">{pc:block pos="index_about_img1"}{/pc}</li>
+                    <li>{pc:block pos="index_about_img2"}{/pc}</li>
+                </ul>
+                <p class="intro_txt"><span class="txt">{pc:block pos="index_about_content"}{/pc}</span><a class="ff_s c_blue2" href="{$CATEGORYS[2][url]}" title="">查看详细>></a></p>
+            </div>
+        </div>
+    <!--公司简介 end-->
+    </div>
+    <div class="index_box f_l">
+    <!--最新动态 start-->
+    	<div class="index_news box">
+        	<div class="pub_hd02"><a class="f_r c_999 ff_s" href="{$CATEGORYS[6][url]}" title="">更多>></a><span class="fs_14 fw_b" id="all_" onclick="news_li_show('all_')"><a href="javascript:">最新动态</a></span><span class="link"><a href="javascript:" title="" id="com_" onclick="news_li_show('com_')">企业新闻</a><a href="javascript:" title="" id="ind_"  onclick="news_li_show('ind_')">行业动态</a><a href="javascript:" title="" id="baike_"  onclick="news_li_show('baike_')">行业百科</a></span></div>
+            <div class="bd">
+            	<div class="img_news">
+                {pc:get sql=" SELECT title,content FROM ji_page WHERE catid=28" return="service_area"}
+                	<div class="img f_l"><a href="{$CATEGORYS[28]['url']}" title="">{pc:block pos="index_news_img"}{/pc}</a></div>
+                    <h3><a class="c_blue2" href="{$CATEGORYS[28]['url']}" title="">{$service_area[0]['title']}</a></h3>
+                    {php $service_con=$service_area[0]['content']}
+                    {php $service_con=strip_tags($service_con)}
+                    {php $service_con=str_cut($service_con,166)}
+                   
+                    <p class="c_999 txt">{$service_con}...</p>
+                 {/pc}
+                </div>
+                <ul class="news_li" id="all_new">
+                {pc:content action="lists" catid="6" num="7" order="id DESC" return="all_news_data"} 
+                	 {loop $all_news_data $all_val}
+                    	<li><span class="c_999 f_r">{date("Y-m-d",$all_val['inputtime'])}</span><a href="{$all_val['url']}" title="">{$all_val['title']}</a></li>
+                    {/loop}
+                {/pc}
+                </ul>
+                <ul class="news_li" id="com_new">
+                {pc:content action="lists" catid="21" num="7" order="id DESC" return="com_news_data"} 
+                	 {loop $com_news_data $com_val}
+                    	<li><span class="c_999 f_r">{date("Y-m-d",$com_val['inputtime'])}</span><a href="{$com_val['url']}" title="">{$com_val['title']}</a></li>
+                    {/loop}
+                {/pc}
+                </ul>
+                <ul class="news_li" id="ind_new">
+                {pc:content action="lists" catid="22" num="7" order="id DESC" return="ind_news_data"} 
+                	 {loop $ind_news_data $ind_val}
+                    	<li><span class="c_999 f_r">{date("Y-m-d",$ind_val['inputtime'])}</span><a href="{$ind_val['url']}" title="">{$ind_val['title']}</a></li>
+                    {/loop}
+                {/pc}
+                </ul>
+                <ul class="news_li" id="baike_new">
+                {pc:content action="lists" catid="23" num="7" order="id DESC" return="baike_news_data"} 
+                	 {loop $baike_news_data $baike_val}
+                    	<li><span class="c_999 f_r">{date("Y-m-d",$baike_val['inputtime'])}</span><a href="{$baike_val['url']}" title="">{$baike_val['title']}</a></li>
+                    {/loop}
+                {/pc}
+                </ul>
+                
+            </div>
+        </div>
+    <!--最新动态 end-->
+    </div>
+    <div class="index_box contact_box f_r">
+    <!--联系 start-->
+    	<div class="contact box">
+        	{pc:block pos="index_contact"}{/pc}
+             <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+        </div>
+    <!--联系 end-->
+    </div>
+</div>
+<div class="hr_10"></div>
+<!--友情链接 start-->
+<div class="friendlink w_1000 o_a">
+	<span class="tit">友情链接：</span><span class="link"> 	
+{pc:link  action="type_list" siteid="1" order="listorder DESC" num="8" return="pic_link"}
+     {loop $pic_link $v}
+     <a href="{$v['url']}" title="{$v['name']}" target="_blank">{$v['name']}</a>
+     {/loop}
+     {/pc}
+	</span> 
+</div>
+<!--友情链接 end-->
+<div class="hr_20"></div>
+{template "content","footer"}
+
+<script type="text/ecmascript">
+function news_li_show(newsid){
+		
+	newsid=newsid+"new";
+
+	$(".news_li").each(function(){
+		if(newsid==this.getAttribute("id")){
+			$(this).css('display',"block");
+		}else{
+			$(this).css('display',"none");
+		}
+	})
+}
+</script>

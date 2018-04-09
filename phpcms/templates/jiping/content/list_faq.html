@@ -1,0 +1,67 @@
+{template 'content','header'}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="news_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+    <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{$CATEGORYS[$parentid][catname]}</span><span class="english">about jiping</span></h2>
+            <ul class="list">
+            {pc:get sql="SELECT arrchildid FROM ji_category WHERE catid=$parentid" cache='3600" return="catarr"}
+            {php $catarr=$catarr[0]['arrchildid']}
+            {php $catarr=explode(',',$catarr)}
+            {php array_shift($catarr)}
+                {loop $catarr $cid}
+                <li{if $catid==$cid} class="cur"{/if}><a href="{$CATEGORYS[$cid][url]}" title="{$CATEGORYS[$cid][catname]}">{$CATEGORYS[$cid][catname]}</a></li>
+                {/loop}  
+             {/pc}
+            </ul>
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="/" title="">首页</a> &gt;<span class="link"><a href="{$CATEGORYS[28]['url']}" title="{$CATEGORYS[$parentid]['catname']}">{$CATEGORYS[$parentid]['catname']}</a></span>&nbsp;&gt; <span class="now">{$CATEGORYS[$catid]['catname']}</span></span></div>
+        <div class="main_content">
+        	<div class="news">
+            	<ul class="list">
+              	{pc:content action="lists" catid="$catid" num="20" order="id DESC" page="$page"} 
+                    {loop $data $r}
+                	<li><span class="c_666 f_r">{date("Y-m-d",$r['inputtime'])}</span><a href="{$r['url']}" title="">{$r['title']}</a></li>
+                    {if $n==10}
+                    <li class="news_line"></li>
+                    {/if}
+                    {if $n==20}
+                     <li class="news_line"></li>
+                    {/if}
+                    {/loop}
+                </ul>
+                <div class="list_page c_666 t_c"> {$pages}</div>
+                 <input type="hidden" value="{$_SERVER['REQUEST_URI']}" id="now_url" />
+               
+                {/pc}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template "content","footer"}

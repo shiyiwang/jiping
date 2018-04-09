@@ -1,0 +1,108 @@
+{template 'content','header'}
+<style type="text/css">
+div.content{
+    margin-left:20px;
+}
+.submit.ib{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+</style>
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="product_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+    <!--左栏 start-->
+    <div class="col_sub f_l">
+        <div class="sidebar">
+        {php $pcatid=$_GET['pcatid']}
+        {pc:get $sql="SELECT `arrparentid` from ji_category where catid=$pcatid" return="parentidarr"} 
+        {/pc}
+        {php $parentidarr=explode(',',$parentidarr[0]['arrparentid'])}
+         <h2 class="bg"><span class="txt">{$CATEGORYS[$parentidarr[1]][catname]}</span><span class="english">about jiping</span></h2>
+            <div class="sidesort">
+            
+            	<ul>
+                {pc:content action="category" catid="$parentidarr[1]" num="10" siteid="$siteid" order="listorder ASC"}
+                	{loop $data $r}
+                	<li class="item {if $parentidarr[2]==$r['catid']} open {/if}">
+                    	<p class="h"><span class="ico ico_fold"></span><a class="fw_b" href="{$r[url]}" title="{$r[catname]}">{$r[catname]}</a></p>
+                        <ul class="sub">
+                        	{php $childarr=explode(',',$r['arrchildid'])}
+                        	{if count($childarr)>1}
+                        		{php array_shift($childarr)}
+                           		{loop $childarr $k $v}
+                             		<li ><a href="{$CATEGORYS[$v][url]}" title="">{$CATEGORYS[$v][catname]}</a></li>
+                            	{/loop}
+                            {/if}
+                        </ul>
+                    </li>
+                   	{/loop}
+                 {/pc}
+            	</ul>
+            </div>
+        </div>
+       <div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="javascript:" title="">首页</a> &gt; <a href="javascript:" title="">产品中心</a> &gt; <span class="now">在线询盘</span></span></div>
+        <div class="main_content">
+        	<div class="inquiry">
+            	<div class="pro_info detail_info c_f">
+                	{php $id=$_GET['id']}
+                  	{pc:get sql="SELECT * FROM ji_product where id=$id" }
+                	<div class="c_img c_img120"><a href="{$data[0]['url']}" title=""><img src="{thumb($data[0]['thumb'],120,120)}" alt="" /></a></div>
+                    <div class="info">
+                    
+                        <h2 class="c_666 line_24">{$data[0]['title']}</h2>
+                        <ul>
+                        {if $pcatid}
+                        
+                        
+                            <li class="item c_f"><span class="a">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格：</span><span class="b"><em class="price">{$data[0]['price']}</em> 元/吨</span></li>
+                            <li class="item c_f"><span class="a">产品型号：</span><span class="b">{$data[0]['model_number']}</span></li>
+                            <li class="item c_f"><span class="a">发货地点：</span><span class="b">{$data[0]['sent_address']}</span></li>
+                            	{php $has_stockarr=array('预定','现货供应')}
+                            <li class="item c_f"><span class="a">供货方式：</span><span class="b">{$has_stockarr[$data[0]['has_stock']]}</span></li>
+                         {/if}
+                         {php $model_number=$data[0]['model_number']}
+            			 {php $title=$data[0]['title']}
+                         
+                        </ul> 
+						<input type="hidden" value="{$_GET['id']}" id="id" />
+						<input type="hidden" value="{$_GET['pcatid']}" id="pcatid" />
+                    </div>
+                    
+                    {/pc}
+                </div>
+              
+            </div>
+            <input type="hidden" value="{$title}" name="name"  id="name"/>
+			<input type="hidden" value="{$model_number}" name="model"  id="model" />
+            
+             <script language='javascript' src='{APP_PATH}index.php?m=formguide&c=index&a=show&formid=13&action=js&siteid=1'></script>
+            
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template 'content','footer'}

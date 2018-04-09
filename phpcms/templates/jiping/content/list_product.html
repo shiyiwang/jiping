@@ -1,0 +1,135 @@
+{template "content","header"}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="product_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+
+<!--正文start-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+<!--左栏 start-->
+    <div class="col_sub f_l">
+        <div class="sidebar">
+      
+         <h2 class="bg"><span class="txt">{$CATEGORYS[11][catname]}</span><span class="english">{$CATEGORYS[11]['description']}</span></h2>
+            <div class="sidesort">
+            
+
+                <ul class="classify">
+                 {pc:get sql="SELECT `arrparentid` FROM ji_category WHERE catid=$catid" return="parent_cat_arr"}
+                {/pc}
+                {php $parent_cat_arr=explode(',',$parent_cat_arr[0]['arrparentid']);array_shift($parent_cat_arr)}
+                
+                
+                  {pc:content action="category" catid="11" num="20" siteid="$siteid" order="listorder ASC" return="pro_cat1"}
+                   {loop $pro_cat1 $cat1}
+                   		{php $is_this_cat1=in_array($cat1['catid'],$parent_cat_arr)}
+                        
+                	<li class="item  {if $is_this_cat1} open {/if}  ">
+                    	<h3 class="bg_x click">{$cat1['catname']}</h3>
+                        <div class="li">
+                        	<ul>
+                            {pc:content action="category" catid="$cat1['catid']" num="10" siteid="$siteid" order="listorder ASC"}
+                                {loop $data $r}
+                            	<li class=" {if $parent_cat_arr[2]==$r['catid']} open {/if}">
+                                	<p class="h"><span class="ico ico_fold"></span><a class="fw_b" href="{$r[url]}" title="{$r[catname]}">{$r[catname]}</a></p>
+                                    <ul class="sub">
+                                        {php $childarr=explode(',',$r['arrchildid'])}
+                                        {if count($childarr)>1}
+                                            {php array_shift($childarr)}
+                                            {loop $childarr $k $v}
+                                                <li ><a href="{$CATEGORYS[$v][url]}" title="">{$CATEGORYS[$v][catname]}</a></li>
+                                            {/loop}
+                                        {/if}
+                                    </ul>
+                                </li>
+                             	{/loop}
+                             {/pc}
+                            </ul>
+                        </div>
+                    </li>
+                     
+               {/loop}
+               {/pc}
+                    
+                 </ul>
+               
+                
+            </div>
+        </div>
+       <div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+     <!--左栏 end-->
+    <div class="col_main f_r">
+    <div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="/" title="">首页</a> > 
+    <a href="{$CATEGORYS[$parent_cat_arr['0']][url]}" title="">{$CATEGORYS[$parent_cat_arr['0']][catname]}</a> > 
+    {if $parentid!=11}
+     <a href="{$CATEGORYS[$parent_cat_arr['1']][url]}" title="">{$CATEGORYS[$parent_cat_arr['1']][catname]}</a> > 
+    {/if}
+     <span class="now">{$CATEGORYS[$catid][catname]}</span>
+  
+     </span></div>
+        <div class="main_content">
+       
+            <div class="pro_list">
+    
+            	{php $typeid=$_GET['typeid']}
+            	{if $_GET['typeid']}
+                  {php $sql="SELECT * FROM ji_product WHERE catid=$catid AND typeid=".$_GET['typeid']}
+                  {pc:get sql="SELECT count(id) as num FROM ji_product WHERE catid=$catid AND typeid=$typeid" order="id DESC" return="countarr"}
+                  {/pc}
+                {else}
+                  {php $sql="SELECT * FROM ji_product WHERE catid=$catid"}
+                  {pc:get sql="SELECT count(id) as num FROM ji_product WHERE catid=$catid"  order="id DESC" return="countarr"}
+                  {/pc}
+                {/if}
+               
+           
+                {pc:get sql="$sql" num="16" page="$page"  order="id DESC" return="returnarr"}
+             
+                <ul class="c_f list">
+                 {if $returnarr}
+                    {loop $returnarr $re}  
+                        <li class="item hot_sales">{php $img_thumb_url=thumb($re['thumb'],151,0);}
+                            <div class="c_img c_img160"><a href="{$re[url]}" title="{$r[title]}"  target="_blank"><img src="{$img_thumb_url}" alt="{$re[title]}" /></a></div>
+                            <p class="pro_tit02 t_c"><a href="{$re[url]}" title="{$re[title]}"  target="_blank">{$re[title]}</a></p>
+                            <p class="price t_c">价格：{if $re['price']}<span class="fw_b c_f60 fs_14">{$re['price']} </span>元{else}<span class="pro_inquery"><a href="inquery-26-{$re['catid']}-{$re['id']}.html" title=""  target="_blank">询盘</a></span>{/if}</p>
+                        </li>
+                    {/loop}
+                {else}
+                	抱歉，暂时还没有查询结果！
+                {/if}
+               
+                </ul>
+                 <div class="list_page c_666 t_c"> 
+                 	{php $pagehtml=pages($countarr[0]['num'],$page,16)}<!--因分页不出来，故直接调用-->
+                 	{if $typeid}
+                    	{php $pagehtml=preg_replace("/product\-(\d+)\-(\d+)\.html\"/i","product-$1-$2_".$typeid.".html\"",$pagehtml)}
+                    {/if}
+                    {php echo $pagehtml}
+                    <input type="hidden" value="{$_SERVER['REQUEST_URI']}" id="now_url" />
+                </div>
+               {/pc}
+            </div>
+        </div>
+    </div>
+</div>
+<!--正文end-->
+<div class="hr_30"></div>
+{template "content","footer"}

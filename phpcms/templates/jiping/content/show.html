@@ -1,0 +1,103 @@
+{template 'content','header'}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="news_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+     <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{$CATEGORYS[$parentid][catname]}</span><span class="english">{$CATEGORYS[6]['description']}</span></h2>
+            <ul class="list">
+            {pc:get sql="SELECT arrchildid FROM ji_category WHERE catid=6" cache='3600" return="catarr"}
+            {php $catarr=$catarr[0]['arrchildid']}
+            {php $catarr=explode(',',$catarr)}
+            {php array_shift($catarr)}
+                {loop $catarr $cid}
+                <li {if $catid==$cid} class="cur"{/if}><a href="{$CATEGORYS[$cid][url]}" title="{$CATEGORYS[$cid][catname]}">{$CATEGORYS[$cid][catname]}</a></li>
+                {/loop}  
+             {/pc}
+            </ul>
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="index.php" title="">首页</a> &gt; <span class="link"><a href="{$CATEGORYS[6]['url']}" title="{$CATEGORYS[6]['catname']}">{$CATEGORYS[6]['catname']}</a></span>&nbsp;&gt; <span class="now">{$CATEGORYS[$catid]['catname']}</span></span></div>
+        <div class="main_content">
+        	<div class="news_info">
+            	<h3 class="fs_18 t_c">{$title}</h3>
+                <p class="infos t_c c_999"><span class="mr">点击数：<span id="hits"></span>次</span><span class="mr">发表时间：{$inputtime}</span><span>来源：{$copyfrom}</span></p>
+                  <script language="JavaScript" src="{APP_PATH}api.php?op=count&id={$id}&modelid={$modelid}"></script>    
+                <div class="info">
+                {$content}
+                  </div>
+                <div class="info_d c_f">
+                    <div class="share f_r">
+                        <!-- Baidu Button BEGIN -->
+                        <div class="bdshare_t bds_tools get-codes-bdshare" id="bdshare">
+                            <span class="f_l shareto">分享到：</span>
+                            <a class="bds_qzone" title="分享到QQ空间" href="#"></a>
+                            <a class="bds_tsina" title="分享到新浪微博" href="#"></a>
+                            <a class="bds_tqq" title="分享到腾讯微博" href="#"></a>
+                            <a class="bds_renren" title="分享到人人网" href="#"></a>
+                            <a class="bds_kaixin001" title="分享到开心网" href="#"></a>
+                            <a class="bds_tsohu" title="分享到搜狐微博" href="#"></a>
+                            <a class="bds_douban" title="分享到豆瓣网" href="#"></a>
+                            <a class="bds_t163" title="分享到网易微博" href="#"></a>
+                            <a class="bds_taobao" title="分享到我的淘宝" href="#"></a>
+                            <a class="bds_tqf" title="分享到腾讯朋友" href="#"></a>
+                            <span class="bds_more">更多</span>
+                        </div>
+                        <script data="type=tools&amp;uid=3904611" id="bdshare_js" type="text/javascript" src="http://bdimg.share.baidu.com/static/js/bds_s_v2.js?cdnversion=377116"></script>
+                        <script id="bdshell_js" type="text/javascript" src="http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=11"></script>
+                        <script type="text/javascript">
+                            document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + new Date().getHours();
+                        </script>
+                        <!-- Baidu Button END -->
+                    </div>
+                    <div class="keywords f_l">关键字：{loop $keywords $keyword}<a href="{APP_PATH}index.php?m=content&c=tag&catid={$catid}&tag={urlencode($keyword)}" class="blue">{$keyword}</a> {/loop}</div>
+                </div>
+                <div class="fanye fs_14">
+                    <span>上一篇：<a href="{$previous_page[url]}">{$previous_page[title]}</a></span><span>下一篇：<a href="{$next_page[url]}">{$next_page[title]}</a></span>
+                </div>
+            </div>
+            <div class="related_news">
+                <h3 class="fs_14">热点新闻</h3>
+                <ul class="c_f">
+                   
+      
+                    
+                    {pc:content  action="position" posid="18" order="listorder DESC" num="6"}
+
+                    {loop $data $key $val}
+                    
+                    <li> <a href="{$val['url']}">{$val['title']}</a></li>
+                    
+                    {/loop}
+                    
+                    
+                </ul>
+            </div> 
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template "content","footer"}

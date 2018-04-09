@@ -1,0 +1,88 @@
+{template 'content','header'}
+{var_dump($channelurl)}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="product_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+        <div class="search bg f_r">
+			<form method="get" name="" id="" action="" target="_blank">
+			<div class="select"><select style="display:none;" name="" id="headSearch"><option selected="selected" value="0">请选择产品分类</option><option value="1">环保水处理原料</option><option value="2">漂洗原料</option><option value="3">电镀原料</option><option value="4">日化原料</option><option value="5">环保清洗原料</option><option value="6">纺织印染助剂</option><option value="7">建筑外加剂原料</option><option value="8">稀有化工原料</option><option value="9">其它产品</option></select></div>
+			<input type="text" class="t_ipt" onblur="if(this.value==''){this.value='请输入搜索关键字';this.style.color='#bebebe'}" onfocus="if(this.value=='请输入搜索关键字'){this.value='';this.style.color='#333'}" value="请输入搜索关键字" /><button type="submit" class="btn_srh">搜索</button>
+			</form>
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+   <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{if $parentid}{$CATEGORYS[$parentid][catname]}{else}{$CATEGORYS[$catid][catname]}{/if}</span><span class="english">about jiping</span></h2>
+            
+            
+             <div class="sidesort">
+            	<ul> {if !empty($parentid)}
+                		{php $nowcatid=$parentid}
+                	{else}
+               			{php $nowcatid=$catid}
+                	{/if}
+                {pc:content action="category" catid="$nowcatid" num="10" siteid="$siteid" order="listorder ASC"}
+                	{loop $data $r}
+                	<li class="item {if $catid==$r['catid']} open {/if}">
+                    	<p class="h"><span class="ico ico_fold"></span><a class="fw_b" href="{$r[url]}" title="{$r[catname]}">{$r[catname]}</a></p>
+                        <ul class="sub">
+                        	{php $childarr=explode(',',$r['arrchildid'])}
+                        	{if count($childarr)>1}
+                        		{php array_shift($childarr)}
+                           		{loop $childarr $k $v}
+                             		<li ><a href="{$CATEGORYS[$v][url]}" title="">{$CATEGORYS[$v][catname]}</a></li>
+                            	{/loop}
+                            {/if}
+                        </ul>
+                    </li>
+                   	{/loop}
+                 {/pc}
+            	</ul>
+            </div>
+            
+            
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="javascript:" title="">首页</a> &gt;  <span class="now">{$CATEGORYS[$catid][catname]}</span></span></div>
+        <div class="main_content">
+        	
+            <div class="pro_list">
+             {pc:content action="lists" catid="$catid" num="1" order="id DESC" page="$page"}
+            	<ul class="c_f list">
+                {loop $data $re}  
+                	<li class="item hot_sales">
+                    	<div class="c_img c_img160"><a href="{$re[url]}" title="{$r[title]}"><img src="{$re[thumb]}" alt="{$re[title]}" /></a></div>
+                        <p class="pro_tit02 t_c"><a href="{$re[url]}" title="{$re[title]}">{$re[title]}</a></p>
+                        <p class="price t_c">价格：<span class="fw_b c_f60 fs_14">{$re['price']}</span>元</p>
+                    </li>
+                {/loop}
+                </ul>
+                <div class="list_page c_666 t_c"> 
+                	{$pages}
+                </div>
+            {/pc}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template "content","footer"}

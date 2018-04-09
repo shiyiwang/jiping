@@ -1,0 +1,65 @@
+{template 'content','header'}
+
+<!--banner start-->
+{if $catid==34}
+{pc:block pos="contactus_banner"}{/pc}
+{else}
+{pc:block pos="aboutus_banner"}{/pc}
+{/if}
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+    <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{if $parentid}{$CATEGORYS[$parentid][catname]}{else}{$CATEGORYS[$catid][catname]}{/if}</span><span class="english">
+            {if $catid==34}
+            	{$CATEGORYS[33]['description']}
+            {else}
+            	{$CATEGORYS[1]['description']}
+            {/if}
+         
+            
+            </span></h2>
+            <ul class="list">
+                {loop $arrchild_arr $cid}
+                <li{if $catid==$cid} class="cur"{/if}><a href="{$CATEGORYS[$cid][url]}" title="{$CATEGORYS[$cid][catname]}">{$CATEGORYS[$cid][catname]}</a></li>
+                {/loop}  
+            </ul>
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="/" title="">首页</a> > 
+{if $parentid}<a href="{if $parentid==1}{$CATEGORYS[2][url]}{else}{if $parentid==33}{$CATEGORYS[34][url]}{else}{$CATEGORYS[$parentid][url]}{/if}{/if}" title="{$CATEGORYS[$parentid][catname]}">{$CATEGORYS[$parentid][catname]}</a> >&nbsp;<span class="now">{$CATEGORYS[$catid][catname]}</span>{else}<span class="now">{$CATEGORYS[$catid][catname]}</span>{/if}
+   </span></div>
+        <div class="main_content">
+        	<div class="company_intro c_f">
+            	{if $catid==2}<div class="img f_l">{pc:block pos="aboutus"}{/pc}</div>{/if}
+                <div class="info">
+               	{$content}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template 'content','footer'}

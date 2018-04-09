@@ -1,0 +1,191 @@
+{template 'content','header'}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="product_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+<!--左栏 start-->
+    <div class="col_sub f_l">
+        <div class="sidebar">
+      
+         <h2 class="bg"><span class="txt">{$CATEGORYS[11][catname]}</span><span class="english">{$CATEGORYS[11]['description']}</span></h2>
+            <div class="sidesort">
+            
+
+                <ul class="classify">
+                 {pc:get sql="SELECT `arrparentid` FROM ji_category WHERE catid=$catid" return="parent_cat_arr"}
+                {/pc}
+                {php $parent_cat_arr=explode(',',$parent_cat_arr[0]['arrparentid']);array_shift($parent_cat_arr)}
+                
+                
+                  {pc:content action="category" catid="11" num="20" siteid="$siteid" order="listorder ASC" return="pro_cat1"}
+                   {loop $pro_cat1 $cat1}
+                   		{php $is_this_cat1=in_array($cat1['catid'],$parent_cat_arr)}
+                	<li class="item  {if $is_this_cat1} open {/if} ">
+                    	<h3 class="bg_x click">{$cat1['catname']}</h3>
+                        <div class="li">
+                        	<ul>
+                            {pc:content action="category" catid="$cat1['catid']" num="20" siteid="$siteid" order="listorder ASC"}
+                                {loop $data $r}
+                            	<li class=" {if $parent_cat_arr[2]==$r['catid']} open {/if}">
+                                	<p class="h"><span class="ico ico_fold"></span><a class="fw_b" href="{$r[url]}" title="{$r[catname]}">{$r[catname]}</a></p>
+                                    <ul class="sub">
+                                        {php $childarr=explode(',',$r['arrchildid'])}
+                                        {if count($childarr)>1}
+                                            {php array_shift($childarr)}
+                                            {loop $childarr $k $v}
+                                                <li ><a href="{$CATEGORYS[$v][url]}" title="">{$CATEGORYS[$v][catname]}</a></li>
+                                            {/loop}
+                                        {/if}
+                                    </ul>
+                                </li>
+                             	{/loop}
+                             {/pc}
+                            </ul>
+                        </div>
+                    </li>
+                     
+               {/loop}
+               {/pc}
+                    
+                 </ul>
+               
+                
+            </div>
+        </div>
+       <div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+     <!--左栏 end-->
+    <div class="col_main f_r">
+    	
+		 <div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="javascript:" title="">首页</a> &gt; 
+    <a href="javascript:" title="">{$CATEGORYS[$parent_cat_arr['0']][catname]}</a> &gt; 
+     <a href="javascript:" title="">{$CATEGORYS[$parent_cat_arr['1']][catname]}</a> &gt;
+	  <a href="javascript:" title="">{$CATEGORYS[$parent_cat_arr[$catid]][catname]}</a> &gt; 
+     <span class="now">{$CATEGORYS[$catid][catname]}</span></span></div>
+        <div class="detail_info c_f">
+            <div class="img" id="photoAlbum">
+                <div id="superAlbum">
+                    <span class="img_mask" id="img_mask"></span>
+                    {php $id=$_GET['id']}
+                {pc:get sql="SELECT * FROM  ji_product p LEFT JOIN ji_product_data d ON p.id=d.id WHERE p.id=$id "   return="alldata"}
+         
+   					{php $imagedata=$alldata[0]['manypic']}
+            
+          			{php $imagedata=string2array($imagedata)}
+                    <div class="c_img big_img"><a href="javascript:"><img src="{$imagedata[0]['url']}" data-superbig="{$imagedata[0]['url']}" id="bigPIC" alt="" /></a></div>
+                </div>
+                <div class="po_bigView" id="po_bigView"><img src="" class="superPIC" id="superPIC" alt="" /></div>
+                <ul class="s_img_list album_list c_f" id="album_list">
+        
+                	{loop $imagedata $re}
+                    
+                    <li class="item {if $n==1} select {/if}"><a href="{$re['url']}" data-superbig="{$re['url']}"><img src="{thumb($re['url'],42,42)}" alt="" /></a></li>
+                    {/loop}
+                    
+                    
+                  
+                	
+                </ul>
+            </div>
+            <div class="info">
+            	{php $detaildata=$alldata[0]}
+            	<h2 class="c_666 fs_14 line_24">{$detaildata['title']}</h2>
+                <ul>
+                    <li class="item c_f"><span class="a">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格：</span><span class="b"><em class="price">{$detaildata['price']}</em> 元/吨</span></li>
+                     <li class="item c_f"><span class="a">英文名称：</span><span class="b">{$detaildata['title_en']}</span></li>
+                    <li class="item c_f"><span class="a">产品型号：</span><span class="b">{$detaildata['model_number']}</span></li>
+                    <li class="item c_f"><span class="a">发货地点：</span><span class="b">{$detaildata['sent_address']}</span></li>
+                    														{php $has_stockarr=array('预定','现货供应')}
+                    <li class="item c_f"><span class="a">供货方式：</span><span class="b">{$has_stockarr[$detaildata['has_stock']]}</span></li>
+                </ul>
+                <div class="buy_box">
+                    <p class="buy"><a class="bg btn_buy" href="inquery-26-{$catid}-{$id}.html" title=""></a></p>
+                    <div class="share c_f">
+                        <!-- Baidu Button BEGIN -->
+                        <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+                            <span class="c_999 f_l shareto">分享到：</span>
+                            <a class="bds_tsina"></a>
+                            <a class="bds_tqq"></a>
+                            <span class="bds_more">更多</span>
+                        </div>
+                    <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3904611" ></script>
+                    <script type="text/javascript" id="bdshell_js"></script>
+                    <script type="text/javascript">
+                        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + new Date().getHours();
+                    </script>
+                    <!-- Baidu Button END -->
+                    </div>
+                </div>
+            </div>          
+        </div>
+        <div class="hr_20"></div>
+        <div class="pro_detail">
+        	<div class="hd bg_x">商品详情</div>
+            <div class="bd">
+            	{$detaildata['content']}
+            </div>
+        </div>
+        {/pc}
+        <div class="hr_10"></div>
+        <!--相关同类产品 start-->
+        <div class="like_pro">
+        	<div class="hd">相关同类产品</div>
+            <div class="bd">
+            	<div id="likePre" class="bg"></div>
+                <div class="like_box" id="likeBox">
+                	<ul class="c_f" id="likeContent">
+                    {pc:content action="lists" catid="$catid" num="20"  return="data"}
+						{loop $data $r}
+                        <li class="item">
+                        	<div class="c_img c_img120"><a href="{$r['url']}" title=""><img src="{$r['thumb']}" alt="{$r['title']}" /></a></div>
+                            <p class="pro_tit02 t_c"><a href="{$r['url']}" title="{$r['title']}">{$r['title']}</a></p>
+                        	<p class="price t_c">价格：<span class="fw_b c_f60 fs_14">{$r['price']}</span>元</p>
+                        </li>
+                        {/loop}
+                     {/pc}  
+                    </ul>
+                </div>
+                <div id="likeNext" class="bg"></div>
+            </div>
+            <script type="text/javascript">
+				new Marquee(
+				{
+				MSClass : ["likeBox","likeContent"],
+				PrevBtnID : "likePre",
+				NextBtnID : "likeNext",
+				Direction : 2,
+				Step : 0.1,
+				Width : 690,
+				Height : 200,
+				Timer : 20,
+				DelayTime : 3000,
+				WaitTime : 3000,
+				ScrollStep: 0,
+				SwitchType: 0,
+				AutoStart : true
+				});
+			</script>
+        </div>
+        <!--相关同类产品 end-->
+    </div>
+</div>
+<div class="hr_20"></div>
+{template "content","footer"}

@@ -1,0 +1,167 @@
+{template 'content','header'}
+
+<script type="text/javascript" src="{JS_PATH}formvalidator.js" charset="UTF-8"></script> 
+<script type="text/javascript" src="{JS_PATH}formvalidatorregex.js" charset="UTF-8"></script>
+<link href="{CSS_PATH}link.css" rel="stylesheet" type="text/css" />
+<link href="{CSS_PATH}table_form.css" rel="stylesheet" type="text/css" /> 
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="product_banner"}{/pc}</div>
+
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+         <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+   <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{$CATEGORYS[11]['catname']}</span><span class="english">{$CATEGORYS[11]['description']}</span></h2>
+            
+            
+             <div class="sidesort">
+            	
+                <ul class="classify">
+               
+                {pc:content action="category" catid="11" num="20" siteid="$siteid" order="listorder ASC" return="pro_cat1"}
+                             {loop $pro_cat1 $cat1}
+                              
+                	<li class="item close">
+                    	<h3 class="bg_x click">{$cat1['catname']}</h3>
+                        <div class="li">
+                        	<ul>
+                            {php $cat2=$cat1['catid']}
+              				{pc:content action="category" catid="$cat2" num="20" siteid="$siteid" order="listorder ASC"}
+                             {loop $data $r}
+                             	
+                               
+                            	<li  {if $catid==$r['catid']} class="open" {/if}>
+                                	<p class="h"><span class="ico ico_fold"></span><a class="fw_b" href="{$r[url]}" title="{$r[catname]}">{$r[catname]}</a></p>
+                                    <ul class="sub">
+                                {php $childarr=explode(',',$r['arrchildid'])}
+                        		{if count($childarr)>1}
+                        			{php array_shift($childarr)}
+                           			{loop $childarr $k $v}
+                                        <li ><a href="{$CATEGORYS[$v][url]}" title="">{$CATEGORYS[$v][catname]}</a></li>
+                            		{/loop}
+                                {/if}
+                                    </ul>
+                                </li>
+                             {/loop}
+                           {/pc}
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    {/loop}
+                    {/pc}
+                   
+                 </ul>
+            </div>
+            
+            
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="/" title="">首页</a> &gt; <span class="now">申请友情链接</span></span></div>
+        <div class="main_content">
+        	
+            <div>
+
+<form action="{APP_PATH}index.php?m=link&c=index&a=register&siteid={$siteid}" method="post" name="myform" id="myform" >
+<table cellspacing="1" cellpadding="0" class="table_form">
+
+<tbody><tr> 
+<th width='60'>链接类型</th>
+<td width="300"><input type="radio" onclick="$('#logolink').hide()" checked="checked" value="0" name="linktype" class="radio_style"> 文字链接
+<input type="radio" onclick="$('#logolink').show()" value="1" name="linktype" class="radio_style"> Logo链接
+</td>
+</tr>
+
+<tr> 
+<th>网站名称</th>
+<td><input type="text" value="" id="name" name="name" class="input-text"></td>
+</tr>
+<tr> 
+<th>网站地址</th>
+<td><input type="text" size="40" value="" name="url" id="url" class="input-text"></td>
+</tr>
+<tr style="display: none;" id="logolink"> 
+<th>Logo地址</th>
+<td><input type="text" size="40" value="" name="logo" id="logo" class="input-text"></td>
+</tr>
+ <tr>
+                <th>联系人</th>
+                <td><input type="text" value="" id="username" name="username" class="input-text"></td>
+              </tr>            
+              <tr>
+                <th>联系电话:</th>
+                <td><input type="text" value="" name="introduce" id="introduce" class="input-text" ></td>
+              </tr>
+              <tr>
+{if $setting['enablecheckcode']=='1'}
+<tr>
+       <th>验证码：</th>
+       <td><input name="code" type="text" id="code" size="10"  class="input-text"/> {form::checkcode('code_img','4','14',110,30)}</td>
+</tr>
+{/if}
+<tr> 
+<th></th>
+<td><input type="submit" value=" 申 请 " name="dosubmit" class="button"> <input type="reset" value=" 取 消 " name="reset" class="button"> </td>
+</tr> 
+</tbody></table>
+</form>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+<script type="text/javascript">
+<!--
+	$(function(){
+	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
+	$("#name").formValidator({onshow:"请输入网站名称",onfocus:"请输入网站名称"}).inputValidator({min:1,max:999,onerror:"网站名称不能为空"});
+	$("#username").formValidator({onshow:"请输入联系人姓名",onfocus:"请输入联系人姓名"}).inputValidator({min:1,max:999,onerror:"联系人不能为空"}).regexValidator({regexp:"^\.{2,5}$",onerror:"姓名不短于两个字符，不长于5个字符"});
+	$("#introduce").formValidator({onshow:"请输入6到12位纯数字的电话或手机",onfocus:"请输入6到12位纯数字的电话或手机"}).inputValidator({min:1,max:999,onerror:"联系方式不能为空"}).regexValidator({regexp:"^\\d{6,12}$",onerror:"请输入6到12位纯数字的电话或手机"});
+	  
+ 	$("#url").formValidator({onshow:"请输入网站网址,格式应该为http://www.szjiping.com/",onfocus:"请输入网站网址,格式应该为http://www.szjiping.com/"}).inputValidator({min:1,onerror:"请输入网站网址，格式为http://www.szjiping.com/"}).regexValidator({regexp:"^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&]*([^<>])*$",onerror:"格式应该为http://www.szjiping.com/"})
+ 	$("#code").formValidator({onshow:"请输入验证码",onfocus:"验证码不能为空"}).inputValidator({min:1,max:999,onerror:"验证码不能为空"}).ajaxValidator({
+	    type : "get",
+		url : "",
+		data :"m=pay&c=deposit&a=public_checkcode",
+		datatype : "html",
+		async:'false',
+		success : function(data){	
+            if(data == 1)
+			{
+                return true;
+			}
+            else
+			{
+                return false;
+			}
+		},
+		buttons: $("#dosubmit"),
+		onerror : "验证码错误",
+		onwait : "验证中"
+	});
+ 	})
+//-->
+</script>
+{template "content","footer"}

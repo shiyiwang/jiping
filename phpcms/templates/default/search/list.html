@@ -1,0 +1,105 @@
+{template 'search','header'}
+<!--banner start-->
+<div class="other_banner" > {pc:block pos="product_banner"}{/pc}</div>
+<!--banner end-->
+<!--搜索 start-->
+<div class="search_bar">
+	<div class="w_1000 o_a">
+    	<p class="hot_srh f_l">热搜产品：{pc:block pos="hot_searchkey"}{/pc}</p>
+        <div class="search bg f_r">
+			{template "content","search_bar"}
+		</div>
+    </div>
+</div>
+<!--搜索 end-->
+<div class="hr_12"></div>
+<div class="main w_1000 o_a">
+   <!--左栏 start-->
+    <div class="col_sub f_l">
+    	<div class="sidebar">
+        	<h2 class="bg"><span class="txt">{$CATEGORYS[11]['catname']}</span><span class="english">{$CATEGORYS[11]['description']}</span></h2>
+            
+            
+             <div class="sidesort">
+            	
+                <ul class="classify">
+               
+                
+                {pc:content action="category" catid="11" num="20" siteid="$siteid" order="listorder ASC" return="pro_cat1"}
+                             {loop $pro_cat1 $cat1}
+                             
+                	<li class="item  open ">
+                    	<h3 class="bg_x click">{$cat1['catname']}</h3>
+                        <div class="li">
+                        	<ul>
+                            {php $cat2=$cat1['catid']}
+              				{pc:content action="category" catid="$cat2" num="20" siteid="$siteid" order="listorder ASC" return="cat2_data"}
+                             {loop $cat2_data $r}
+                             	
+                               
+                            	<li  {if $catid==$r['catid']} class="open" {/if}>
+                                	<p class="h"><span class="ico ico_fold"></span><a class="fw_b" href="{$r[url]}" title="{$r[catname]}">{$r[catname]}</a></p>
+                                    <ul class="sub">
+                                {php $childarr=explode(',',$r['arrchildid'])}
+                        		{if count($childarr)>1}
+                        			{php array_shift($childarr)}
+                           			{loop $childarr $k $v}
+                                        <li ><a href="{$CATEGORYS[$v][url]}" title="">{$CATEGORYS[$v][catname]}</a></li>
+                            		{/loop}
+                                {/if}
+                                    </ul>
+                                </li>
+                             {/loop}
+                           {/pc}
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    {/loop}
+                    {/pc}
+                   
+                 </ul>
+            </div>
+            
+            
+        </div>
+    	<div class="index_box contact_box">
+        
+            <div class="contact box">
+            {pc:block pos="index_contact"}{/pc}
+                
+                <div class="tab no_border">{pc:block pos="index_contact_img"}{/pc}</div>
+            </div>
+        </div>
+    </div>
+    <!--左栏 end-->
+    <div class="col_main f_r">
+    	<div class="position bg_x"><span class="ico ico_home"></span><span class="link">您已经浏览到：<a href="/" title="">首页</a> &gt;  <span class="now">产品搜索 - “{$_GET['q']}”</span></span></div>
+        <div class="main_content">
+        	
+            <div class="pro_list">
+           
+            	<ul class="c_f list">
+               	
+                {loop $data $i $r}
+             
+                	<li class="item hot_sales">{php $img_thumb_url=thumb($r['thumb'],150,0);}
+                    	<div class="c_img c_img160"><a href="{$r[url]}" title="{$r[title]}"><img src="{$img_thumb_url}" alt="{$r[title]}" /></a></div>
+                        <p class="pro_tit02 t_c"><a href="{$r[url]}" title="{$r[title]}">{$r[title]}</a></p>
+                        <p class="price t_c">价格：<span class="fw_b c_f60 fs_14">{$r['price']}</span>元</p>
+                    </li>
+                {/loop}
+                {if empty($data)}抱歉，{if $_GET['catid']}“<span class="font_blue"> {$CATEGORYS[$_GET['catid']]['catname']} </span> ”下{/if}暂时还没有关于 “<span class="font_blue"> {$_GET['q']} </span> ” 的查询结果！{/if}
+                </ul>
+                <div class="list_page c_666 t_c"> 
+              
+              		{php $pages=preg_replace("/-[\d]+\.html\?page=([\d+])/i","-$1.html",$pages)}
+               		{$pages}
+                </div>
+          
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hr_20"></div>
+{template "search","footer"}
