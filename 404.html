@@ -56,16 +56,16 @@
 		<img src="/statics/images/404.png" class="bg">
 		<p class="desc">您的页面已经偏离星球</p>
 		<div class="btns">
-			<a href="http://www.szjiping.com" class="sbtn">返回首页</a>
+			<a href="www.szjiping.com" class="sbtn">返回首页</a>
 		</div>
-		<div id="timeout"><em>8</em> 秒后自动跳转回主页</div>
+		<div id="timeout"><em>3</em> 秒后自动跳转回主页</div>
 	</div>
 	<script type="text/javascript">
-		var timeoutNum = 8;
+		var timeoutNum = 3;
 		function timeout(){
 			document.getElementById('timeout').getElementsByTagName('em')[0].innerHTML=timeoutNum--;
 			if(timeoutNum<0){
-				window.location.href = 'http://www.szjiping.com';
+				window.location.href = 'https://www.szjiping.com';
 			}
 		}
 		setInterval(timeout,1000);
