@@ -103,7 +103,7 @@ a.progressCancel:hover {
 .swfupload {
 	vertical-align: top;
 }
-#btupload,.addnew{background: url(images/swfBnt.png) no-repeat; float:left; margin-right:10px;width:75px; height:28px; line-height:28px;font-weight:700; color:#fff}
+#btupload,.addnew{float:left; margin-right:10px;width:75px; height:28px; line-height:28px;font-weight:700; color:#fff;background-color: #03A9F4;}
 #btupload{ vertical-align:middle;border:none;cursor: hand;!important;cursor: pointer }
 .addnew{background-position: left bottom;}
 

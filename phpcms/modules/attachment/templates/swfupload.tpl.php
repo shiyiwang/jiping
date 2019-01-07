@@ -1,5 +1,5 @@
 <?php $show_header = $show_validator = $show_scroll = 1; include $this->admin_tpl('header', 'attachment');?>
-<link href="<?php echo JS_PATH?>swfupload/swfupload.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo JS_PATH?>swfupload/swfupload.css?v=1.1" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>swfupload/swfupload.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>swfupload/fileprogress.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>swfupload/handlers.js"></script>
@@ -27,13 +27,13 @@
 				<input type="button" id="btupload" value="<?php echo L('start_upload')?>" onClick="swfu.startUpload();" />
                 <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit?></font></div>
                 <div class="bk3"></div>
-				
+
                 <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace(array('*.',';'),array('','、'),$file_types)?></font> <?php echo L('formats')?></div><input type="checkbox" id="watermark_enable" value="1" <?php if(isset($watermark_enable) &&$watermark_enable == 1) echo 'checked'?> onclick="change_params()"> <?php echo L('watermark_enable')?>
-        	</div> 	
+        	</div>
     		<div class="bk10"></div>
         	<fieldset class="blue pad-10" id="swfupload">
         	<legend><?php echo L('lists')?></legend>
-        	<ul class="attachment-list"  id="fsUploadProgress">    
+        	<ul class="attachment-list"  id="fsUploadProgress">
         	</ul>
     		</fieldset>
     	</div>
@@ -41,16 +41,16 @@
         <div class="bk10"></div>
         	<?php echo L('enter_address')?><div class="bk3"></div><input type="text" name="info[filename]" class="input-text" value=""  style="width:350px;"  onblur="addonlinefile(this)">
 		<div class="bk10"></div>
-        </div>    	
+        </div>
     	<?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
         <div id="div_swf_3" class="contentList pad-10 hidden">
             <ul class="attachment-list">
-        	 <iframe name="album-list" src="#" frameborder="false" scrolling="no" style="overflow-x:hidden;border:none" width="100%" height="345" allowtransparency="true" id="album_list"></iframe>   
+        	 <iframe name="album-list" src="#" frameborder="false" scrolling="no" style="overflow-x:hidden;border:none" width="100%" height="345" allowtransparency="true" id="album_list"></iframe>
         	</ul>
         </div>
         <div id="div_swf_4" class="contentList pad-10 hidden">
             <ul class="attachment-list">
-        	 <iframe name="album-dir" src="#" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="330" allowtransparency="true" id="album_dir"></iframe>   
+        	 <iframe name="album-dir" src="#" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="330" allowtransparency="true" id="album_dir"></iframe>
         	</ul>
         </div>
         <?php }?>
@@ -66,8 +66,8 @@
 			</li>
 			<?php }}?>
         	</ul>
-        </div>   
-        <?php }?>     
+        </div>
+        <?php }?>
     <div id="att-status" class="hidden"></div>
      <div id="att-status-del" class="hidden"></div>
     <div id="att-name" class="hidden"></div>
@@ -113,7 +113,7 @@ function change_params(){
 	}
 }
 function set_iframe(id,src){
-	$("#"+id).attr("src",src); 
+	$("#"+id).attr("src",src);
 }
 function album_cancel(obj,id,source){
 	var src = $(obj).children("img").attr("path");

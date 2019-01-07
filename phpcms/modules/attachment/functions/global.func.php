@@ -18,7 +18,7 @@
 		if(in_array($ext,$ext_arr)) return 'statics/images/ext/'.$ext.'.'.$type;
 		else return 'statics/images/ext/blank.'.$type;
 	}
-	
+
 	/**
 	 * 附件目录列表，暂时没用
 	 * @param $dirpath 目录路径
@@ -31,7 +31,7 @@
 		$list['local'] = str_replace(array(PC_PATH, DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR), array('',DIRECTORY_SEPARATOR), $filepath);
 		return $list;
 	}
-	
+
 	/**
 	 * flash上传初始化
 	 * 初始化swfupload上传中需要的参数
@@ -65,14 +65,15 @@
 			file_types_description:"All Files",
 			file_upload_limit:"'.$file_upload_limit.'",
 			custom_settings : {progressTarget : "fsUploadProgress",cancelButtonId : "btnCancel"},
-	 
-			button_image_url: "",
-			button_width: 75,
-			button_height: 28,
+
+			button_image_url: "'.JS_PATH.'swfupload/images/picBnt.png",
+			button_width: "75",
+			button_height: "28",
 			button_placeholder_id: "buttonPlaceHolder",
-			button_text_style: "",
-			button_text_top_padding: 3,
+			button_text: "<span class=\"theFont\">选择</span>",
+			button_text_style: ".theFont {font-size: 13px;}",
 			button_text_left_padding: 12,
+			button_text_top_padding: 3,
 			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
 			button_cursor: SWFUpload.CURSOR.HAND,
 
@@ -87,7 +88,7 @@
 			});
 		})';
 		return $init;
-	}		
+	}
 	/**
 	 * 获取站点配置信息
 	 * @param  $siteid 站点id
@@ -120,7 +121,7 @@
 		$arr['thumb_height'] = intval($args[4]);
 		$arr['watermark_enable'] = ($args[5]=='') ? 1 : intval($args[5]);
 		return $arr;
-	}	
+	}
 	/**
 	 * 判断是否为图片
 	 */
@@ -129,7 +130,7 @@
 		$ext = fileext($file);
 		return in_array($ext,$ext_arr) ? $ext_arr :false;
 	}
-	
+
 	/**
 	 * 判断是否为视频
 	 */
